@@ -3,6 +3,7 @@ function calculatBill (form) {
     const priceInput = form.elements["priceInput"];
     const tipInput = form.elements["tipInput"];
     const output = document.getElementById("output");
+    console.log(form.elements);
 
     if (inputValidation(taxInput.value,taxInput.min, taxInput.max,2) === true && inputValidation(priceInput.value,priceInput.min, priceInput.max,2) === true && inputValidation(tipInput.value,tipInput.min, tipInput.max,1) === true) {
         let bill = parseFloat(priceInput.value);
