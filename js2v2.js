@@ -9,29 +9,40 @@
     return `Invalid entry for ${input.dataset.label}. Must be a number between ${input.min} and ${input.max}. \r\n`;
   }
   
-  function calculatBill(form) {
-    const elements = Array.from(form.elements);
-    const inputs = elements.filter(function (element) {
-      return element.type !== "submit";
-    });
+const elements = Array.from(document.getElementById("billForm").elements);
+const inputs = elements.filter(function (element) {
+    return element.type !== "submit";
+});
+
+const submit = document.getElementById("submitButton");
+submit.addEventListener('click', calculateBill);
+
+for (const input of inputs) {
+  input.addEventListener('blur', function(event) {
+    if (Boolean(input.value)) {
+
+      const isValid = inputValidation(
+        input.value,
+        input.min,
+        input.max,
+        parseInt(input.dataset.decimal, 10));
+      if (isValid) {
+        event.target.style.background = "#90EE90";
+      } else {
+        event.target.style.background = "#FF6347";
+      }
+    }
+    
+  });
+};
+
   
+function calculateBill(event) {
+   
+  const form = event.target.parentElement;
     let error = "";
-  
+    
     for (const input of inputs) {
-      
-      input.addEventListener('blur', function(event) {
-        console.log(input.length);
-        if (input.length > 0) {
-          
-          if (inputValidation(input.value,input.min,input.max,parseInt(input.dataset.decimial,10))) {
-            event.target.style.background = "#90EE90";
-          
-          } else {
-            event.target.style.background = "#FF6347";
-          }
-        }
-        
-      });
       if (
         !inputValidation(
           input.value,
@@ -55,18 +66,17 @@
   
       const totalBill = bill + taxBill + tipBill;
   
-      console.log(totalBill);
+      output.innerText = "Price: $" + bill.toFixed(2) + "\r\n" + "Tax: $" + taxBill.toFixed(2)  + "\r\n" + "Tip: $" + tipBill.toFixed(2) + "\r\n" + "Total: $" + totalBill.toFixed(2);
+      
     } else {
+      output.innerText = "";
       alert(error);
+      form.reset();
+      taxInput.style.background = "white";
+      priceInput.style.background = "white";
+      tipInput.style.background = "white";
     }
-  }
-   
-    //     output.innerText = "";
-    //     alert(error);
-    //     form.reset();
-    //     taxInput.style.background = "white";
-    //     priceInput.style.background = "white";
-    //     tipInput.style.background = "white";
+} 
 
   
   function inputValidation(Input, min, max, decimal) {
@@ -97,33 +107,3 @@
     }
   }
   
-  // function InputBackground(input) {
-  //   if (
-  //     inputValidation(taxInput.value, taxInput.min, taxInput.max, 2) === false
-  //   ) {
-  //     document.getElementById("taxInput").style.background = "#FF6347";
-  //   } else {
-  //     document.getElementById("taxInput").style.background = "#90EE90";
-  //   }
-  // }
-  
-  // function priceInputBackground() {
-  //   if (
-  //     inputValidation(priceInput.value, priceInput.min, priceInput.max, 2) ===
-  //     false
-  //   ) {
-  //     document.getElementById("priceInput").style.background = "#FF6347";
-  //   } else {
-  //     document.getElementById("priceInput").style.background = "#90EE90";
-  //   }
-  // }
-  
-  // function tipInputBackground() {
-  //   if (
-  //     inputValidation(tipInput.value, tipInput.min, tipInput.max, 1) === false
-  //   ) {
-  //     document.getElementById("tipInput").style.background = "#FF6347";
-  //   } else {
-  //     document.getElementById("tipInput").style.background = "#90EE90";
-  //   }
-  // }
